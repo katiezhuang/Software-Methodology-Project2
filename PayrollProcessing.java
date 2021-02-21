@@ -2,14 +2,17 @@ import java.util.StringTokenizer;
 import java.util.Scanner;
 
 public class PayrollProcessing {
-    String firstToken;
-    String secondToken;
-    String thirdToken;
-    String fourthToken;
-    String fifthToken;
-    String sixthToken;
+    String commandToken;
+    String nameToken;
+    String departmentToken;
+    String dateToken;
+    String payOrHoursToken;
+    String codeToken;
+
     public PayrollProcessing() {
+
     }
+
     public enum tokenType {
         type1,
         type2,
@@ -18,38 +21,31 @@ public class PayrollProcessing {
         type5,
         type6,
         type7orMore
-    };
+    }
 
     private void findCommand(tokenType type, Company company) {
-        switch(type) {
+        switch (type) {
             case type1:
                 //it's one of the prints PA, PD, PH, or C
-                if (firstToken.length() > 2) {
+                if (commandToken.length() > 2) {
                     System.out.println("Invalid command!");
-                }
-                else if (firstToken.length() == 1) {
-                    if (firstToken.charAt(0) == 'C') {
+                } else if (commandToken.length() == 1) {
+                    if (commandToken.charAt(0) == 'C') {
                         calculateEarnings(company);
-                    }
-                    else {
+                    } else {
                         System.out.println("Invalid command!");
                     }
-                }
-                else {
-                    if (firstToken.charAt(0) != 'P') {
+                } else {
+                    if (commandToken.charAt(0) != 'P') {
                         System.out.println("Invalid command!");
-                    }
-                    else {
-                        if (firstToken.charAt(1) == 'A') {
+                    } else {
+                        if (commandToken.charAt(1) == 'A') {
                             printEarnings(company);
-                        }
-                        else if (firstToken.charAt(1) == 'D') {
+                        } else if (commandToken.charAt(1) == 'D') {
                             printDepartment(company);
-                        }
-                        else if (firstToken.charAt(1) == 'H') {
+                        } else if (commandToken.charAt(1) == 'H') {
                             printdateHired(company);
-                        }
-                        else {
+                        } else {
                             System.out.println("Invalid command!");
                         }
                     }
@@ -63,38 +59,31 @@ public class PayrollProcessing {
                 break;
             case type4:
                 // R command
-                if (firstToken.equals("R")) {
+                if (commandToken.equals("R")) {
                     removeEmployee(company);
-                }
-                else {
+                } else {
                     System.out.println("Invalid command!");
                 }
                 break;
             case type5:
                 // either AP, AF, or S
-                if (firstToken.length() > 2) {
+                if (commandToken.length() > 2) {
                     System.out.println("Invalid command!");
-                }
-                else if (firstToken.length() == 1) {
-                    if (firstToken.charAt(0) == 'S') {
+                } else if (commandToken.length() == 1) {
+                    if (commandToken.charAt(0) == 'S') {
                         setHoursforParttime(company);
-                    }
-                    else {
+                    } else {
                         System.out.println("Invalid command!");
                     }
-                }
-                else {
-                    if (firstToken.charAt(0) != 'A') {
+                } else {
+                    if (commandToken.charAt(0) != 'A') {
                         System.out.println("Invalid command!");
-                    }
-                    else {
-                        if (firstToken.charAt(1) == 'P') {
+                    } else {
+                        if (commandToken.charAt(1) == 'P') {
                             addEmployee(company, 0);
-                        }
-                        else if (firstToken.charAt(1) == 'F') {
+                        } else if (commandToken.charAt(1) == 'F') {
                             addEmployee(company, 1);
-                        }
-                        else {
+                        } else {
                             System.out.println("Invalid command!");
                         }
                     }
@@ -105,44 +94,45 @@ public class PayrollProcessing {
 
         }
     }
+
     public void run() {
         System.out.println("Payroll Processing Starts.");
         Company company = new Company();
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            String command = scanner.nextLine();
-            if (command.equals("Q")) {
+            String line = scanner.nextLine();
+            if (line.equals("Q")) {
                 break;
-            }
-            else if (command.equals("")) {
+            } else if (line.equals("")) {
                 continue;
-            }
-            else {
-                StringTokenizer tokenizer = new StringTokenizer(command);
+            } else {
+                commandToken = null;
+                nameToken = null;
+                departmentToken = null;
+                dateToken = null;
+                payOrHoursToken = null;
+                codeToken = null;
+
+                StringTokenizer tokenizer = new StringTokenizer(line);
                 tokenType type = tokenType.type1;
-                firstToken = tokenizer.nextToken();
+                commandToken = tokenizer.nextToken();
                 while (tokenizer.hasMoreTokens()) {
                     if (type == tokenType.type1) {
                         type = tokenType.type2;
-                        secondToken = tokenizer.nextToken();
-                    }
-                    else if (type == tokenType.type2) {
+                        nameToken = tokenizer.nextToken();
+                    } else if (type == tokenType.type2) {
                         type = tokenType.type3;
-                        thirdToken = tokenizer.nextToken();
-                    }
-                    else if (type == tokenType.type3) {
+                        departmentToken = tokenizer.nextToken();
+                    } else if (type == tokenType.type3) {
                         type = tokenType.type4;
-                        fourthToken = tokenizer.nextToken();
-                    }
-                    else if (type == tokenType.type4) {
+                        dateToken = tokenizer.nextToken();
+                    } else if (type == tokenType.type4) {
                         type = tokenType.type5;
-                        fifthToken = tokenizer.nextToken();
-                    }
-                    else if (type == tokenType.type5) {
+                        payOrHoursToken = tokenizer.nextToken();
+                    } else if (type == tokenType.type5) {
                         type = tokenType.type6;
-                        sixthToken = tokenizer.nextToken();
-                    }
-                    else {
+                        codeToken = tokenizer.nextToken();
+                    } else {
                         type = tokenType.type7orMore;
                         break;
                     }
@@ -152,83 +142,114 @@ public class PayrollProcessing {
         }
         System.out.println("Payroll Processing completed");
     }
-    private void printEarnings(Company company){
+
+    private void printEarnings(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
-        }
-        else {
+        } else {
             System.out.println("--Printing earning statements for all employees--");
             company.print();
         }
     }
-    private void printDepartment(Company company){
+
+    private void printDepartment(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
-        }
-        else {
+        } else {
             System.out.println("--Printing earning statements by department--");
             company.printByDepartment();
         }
     }
-    private void printdateHired(Company company){
+
+    private void printdateHired(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
-        }
-        else {
+        } else {
             System.out.println("--Printing earning statements by date hired--");
             company.printByDate();
         }
     }
-    private void addEmployee(Company company, int PorF){
+
+    private void addEmployee(Company company, int PorF) {
+
+        if(!departmentToken.equals("CS") && !departmentToken.equals("ECE") && !departmentToken.equals("IT")){
+
+            System.out.println("invalid department code");
+            return;
+        }
+
+        if(Double.parseDouble(payOrHoursToken) < 0){
+
+            System.out.println("invalid salary/hourly rate");
+            return;
+
+        }
+        Date dateHired = new Date(dateToken);
+
+        // do I need this?
+        if (!dateHired.isValid()){
+
+            System.out.println("invalid date");
+            return;
+        }
+
+        Employee employee;
+        Profile profile = new Profile(nameToken, departmentToken, dateHired);
+
         if (PorF == 0) {
-            // add a parttime
+            // add a parttime - might have to be changed based on Katie's code for parttime
+            employee = new Parttime(profile, Double.parseDouble(payOrHoursToken));
+
         }
         else {
             // add a fulltime
+
+            if (codeToken == null) {
+
+                employee = new Fulltime(profile, Double.parseDouble(payOrHoursToken));
+
+            } else if (codeToken.equals("1") || codeToken.equals("2") || codeToken.equals("3")) {
+
+                employee = new Management(profile, Double.parseDouble(payOrHoursToken), Integer.parseInt(codeToken));
+            }
+            else{
+
+                System.out.println("invalid management code");
+                return;
+
+            }
+            // I wrote:
+            // Employee fulltime = new Fulltime(profile, Double.parseDouble(payOrHoursToken));
+            // so that everything in the company is just an Employee, but each is an instance of fulltime or parttime or management
+            // I think this is the right way to do it?? but gotta confirm
         }
-//        Date date = new Date(thirdToken);
-//        if (date.isValid()) {
-//            //book has to not exist in library
-//            Book newBook = new Book();
-//            newBook.setName(secondToken);
-//            //how do i do this again?
-//            newBook.setNumber(currSerialNumber);
-//            newBook.setCheckOutStatus(false);
-//            newBook.setDatePublished(date);
-//            lib.add(newBook);
-//            currSerialNumber = (Integer.parseInt(currSerialNumber) + 1) + "";
-//            System.out.println(secondToken + " added to the library.");
-//        }
-//        else {
-//            System.out.println("Invalid Date!");
-//        }
+
+        boolean addSuccessful = company.add(employee);
+
+        if(addSuccessful){
+            System.out.println("Employee added.");
+        }
+        else{
+            System.out.println("Employee is already in the list.");
+        }
+}
+
+    private void removeEmployee(Company company) {
+
+        Date date = new Date(dateToken);
+        Profile profile = new Profile(nameToken, departmentToken, date);
+        Employee employee = new Employee(profile);
+        boolean removeSuccessful = company.remove(employee);
+        if(removeSuccessful){
+            System.out.println("Employee removed.");
+        }
+        else{
+            System.out.println("Employee doesn't exist.");
+        }
+
     }
-//    private Book getBookfromNum(String secondToken, Library lib) {
-//        Book[] array = lib.getBooks();
-//        for (int i = 0; i < lib.getNumBooks(); i++) {
-//            if (array[i].getNumber().equals(secondToken)) {
-//                return array[i];
-//            }
-//        }
-//        return null;
-//    }
-    private void removeEmployee(Company company){
-        // given serial number, is Book in library?
-//        Book found = getBookfromNum(secondToken, lib);
-//        if (found == null) {
-//            System.out.println("Unable to remove, the library does not have this book.");
-//        }
-//        else {
-//            boolean removeSuccess = lib.remove(found);
-//            if (removeSuccess == false) {
-//                System.out.println("Unable to remove, the library does not have this book.");
-//            }
-//            else {
-//                System.out.println("Book#" + secondToken + " removed.");
-//            }
-//        }
-    }
-    private void calculateEarnings(Company company){
+
+    private void calculateEarnings(Company company) {
 //        Book found = getBookfromNum(secondToken, lib);
 //        if (found == null) {
 //            System.out.println("Book#" + secondToken + " is not available.");
@@ -243,7 +264,8 @@ public class PayrollProcessing {
 //            }
 //        }
     }
-    private void setHoursforParttime(Company company){
+
+    private void setHoursforParttime(Company company) {
 //        Book found = getBookfromNum(secondToken, lib);
 //        if (found == null) {
 //            System.out.println("Unable to return Book#" + secondToken + ".");
@@ -258,4 +280,5 @@ public class PayrollProcessing {
 //            }
 //        }
     }
+
 }
