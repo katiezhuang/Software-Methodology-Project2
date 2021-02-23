@@ -1,3 +1,11 @@
+/**
+ * This class holds the information for a Management employee.
+ * Every Management object has Fulltime superclass fields
+ * and can either be a manager (1), a department head (2), or a director (3).
+ * The Management class is a subclass of Fulltime class.
+ *
+ * @author Ria Anand, Katie Zhuang
+ */
 public class Management extends Fulltime {
 
     private int managementCode; // can be 1, 2, or 3
@@ -5,15 +13,23 @@ public class Management extends Fulltime {
     public static final double DEP_HEAD_BONUS = 9500;
     public static final double DIRECTOR_BONUS = 12000;
 
-    // Constructor
-    // managementCode is either 1 (manager), 2 (dep head), or 3 (director)
+    /**
+     * Constructor to initialize a Management employee object.
+     * @param profile - assigns the given profile to the newly created Management object.
+     * @param salary - assigns the given salary to the newly created Management object.
+     * @param managementCode - assigns the given management code to the newly created Management object.
+     */
     public Management(Profile profile, double salary, int managementCode){
 
         super(profile, salary);
         this.managementCode = managementCode;
 
     }
-
+    /**
+     * Overrides the toString method for a Management object
+     * @return String in the format:
+     * "Payment $[payment]::FULL TIME::Annual Salary [salary]::[managerType] Compensation $[managerTypeBonus]"
+     */
     @Override
     public String toString() {
 
@@ -30,7 +46,12 @@ public class Management extends Fulltime {
 
         return super.toString() + "::" + managerType + " Compensation " + String.format("$%,.2f", this.getPayment());
     }
-
+    /**
+     * Equals method to check equivalence of object if object is an instance of Management.
+     * Override method.
+     * @param obj - Object to compare
+     * @return boolean - true if matching profile, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
 
@@ -45,7 +66,10 @@ public class Management extends Fulltime {
 
         return super.equals(management);
     }
-
+    /**
+     * Method to calculate the payments of one payment period for a Management object, including their respective bonus.
+     * Override method.
+     */
     @Override
     public void calculatePayment(){
 
