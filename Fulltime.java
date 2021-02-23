@@ -1,8 +1,9 @@
 public class Fulltime extends Employee{
 
-    double salary;
+    private double salary;
 
-    public Fulltime(double salary){
+    public Fulltime(Profile profile, double salary){
+        super(profile);
         this.salary = salary;
     }
 
@@ -17,17 +18,20 @@ public class Fulltime extends Employee{
         if(this == obj){
            return true;
         }
-
+        if (!(obj instanceof Fulltime)) {
+            return false;
+        }
         Fulltime fulltime = (Fulltime) obj;
 
-        return super.equals(obj) && (this.salary == fulltime.salary);
+        return super.equals(fulltime);
 
     }
 
     @Override
     public void calculatePayment(){
 
-        setMoneyEarned(salary/26);
+        setPayment(salary/26);
 
     }
+
 }
