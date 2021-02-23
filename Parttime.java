@@ -24,7 +24,7 @@ public class Parttime extends Employee {
                     && (this.workingHours == parttime.workingHours)
                     && (this.hourlyRate == parttime.hourlyRate);
         }
-
+        return false;
     }
 
     @Override
