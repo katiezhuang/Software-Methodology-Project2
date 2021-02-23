@@ -91,7 +91,12 @@ public class PayrollProcessing {
                 break;
             case type6:
                 // has to be AM
-
+                if (commandToken.equals("AM")) {
+                    addEmployee(company, 1);
+                }
+                else {
+                    System.out.println("Invalid command!");
+                }
         }
     }
 
@@ -250,35 +255,27 @@ public class PayrollProcessing {
     }
 
     private void calculateEarnings(Company company) {
-//        Book found = getBookfromNum(secondToken, lib);
-//        if (found == null) {
-//            System.out.println("Book#" + secondToken + " is not available.");
-//        }
-//        else {
-//            boolean checkOutSuccess = lib.checkOut(found);
-//            if (checkOutSuccess == false) {
-//                System.out.println("Book#" + secondToken + " is not available.");
-//            }
-//            else {
-//                System.out.println("You’ve checked out Book#" + secondToken + ". Enjoy!");
-//            }
-//        }
+        company.processPayments();
+        System.out.println("Calculation of employee payments is done");
     }
 
     private void setHoursforParttime(Company company) {
-//        Book found = getBookfromNum(secondToken, lib);
-//        if (found == null) {
-//            System.out.println("Unable to return Book#" + secondToken + ".");
-//        }
-//        else {
-//            boolean returnSuccess = lib.returns(found);
-//            if (returnSuccess == false) {
-//                System.out.println("Unable to return Book#" + secondToken + ".");
-//            }
-//            else {
-//                System.out.println("Book#" + secondToken + " return has completed. Thanks!");
-//            }
-//        }
+        Date date = new Date(dateToken);
+        if (date.isValid()) {
+            Profile profile = new Profile(nameToken, departmentToken, date);
+            Employee[] employeeList = company.getEmplist();
+            for (Employee employee : employeeList) {
+                if (employee.getProfile().equals(profile)) {
+                    company.setHours(employee);
+                    System.out.println("Working hours set.");
+                    return;
+                }
+            }
+            System.out.println("Employee does not exist.");
+        }
+        else {
+            System.out.println(dateToken + "is not a valid date!");
+        }
     }
 
 }
