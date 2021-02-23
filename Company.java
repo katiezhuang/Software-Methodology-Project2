@@ -1,3 +1,9 @@
+/**
+ *  This is a container class that holds a list of Employee objects in an array-based implementation.
+ *  Methods within the Company class perform operations on the bag data structure.
+ *
+ *  @author Ria Anand, Katie Zhuang
+ */
 public class Company {
     private Employee[] emplist;
     private int numEmployee;
@@ -8,23 +14,26 @@ public class Company {
     public static final int IT_DEPARTMENT = 3;
 
     /**
-     * Constructor to create an empty bag
+     * Constructor to create an empty bag.
      */
     public Company() {
         emplist = new Employee[GROWTH_FACTOR];
         numEmployee = 0;
     }
 
-
+    /**
+     * Helper method to access private field numEmployee.
+     * @return the number of employees currently within the bag
+     */
     public int getNumEmployee() {
         return this.numEmployee;
     }
-
-
-    public Employee[] getEmplist() {
-        return this.emplist;
-    }
-
+    
+    /**
+     * Helper method to find an employee within emplist that has a matching profile.
+     * @param employee - Employee object to find in this emplist
+     * @return int - index of employee if found, NOT_FOUND otherwise
+     */
     private int find(Employee employee) {
         employee = new Employee(employee.getProfile());
         int index = 0;
@@ -40,7 +49,7 @@ public class Company {
     }
 
     /**
-     * Helper method to grow the capacity of the emplist array by 4
+     * Helper method to grow the capacity of the emplist array by 4.
      */
     private void grow() {
         Employee[] biggerCompany = new Employee[numEmployee + GROWTH_FACTOR];
@@ -50,7 +59,13 @@ public class Company {
         }
         emplist = biggerCompany;
     }
-
+    
+    /**
+     * Adds an Employee to this Company.
+     * First checks to see if profile already present in emplist. If so, returns false
+     * @param employee - Employee object to add to this Library
+     * @return boolean - true if employee successfully added, false otherwise
+     */
     public boolean add(Employee employee) { //check the profile before adding
 
         if (numEmployee == emplist.length) {
@@ -67,7 +82,12 @@ public class Company {
         }
 
     }
-
+    
+    /**
+     * Removes an Employee from emplist.
+     * @param employee - Employee object to remove from the bag
+     * @return boolean - true if employee is successfully removed, false if employee doesn't exist in this Company
+     */
     public boolean remove(Employee employee) { //maintain the original sequence
         int index = find(employee);
         // make sure find is accounting for employees that don't exist
@@ -93,7 +113,12 @@ public class Company {
         }
 
     }
-
+    
+    /**
+     * Sets the hours worked of an Employee from emplist.
+     * @param employee - Employee object to set hours to
+     * @return boolean - true if employee is successfully set, false if employee doesn't exist or is not a part-time employee
+     */
     public boolean setHours(Employee employee) { //set working hours for a part time
         int index = find(employee);
         if (index == NOT_FOUND) {
@@ -110,13 +135,19 @@ public class Company {
             return false;
         }
     }
-
+    
+    /**
+     * Processes payments of all employees by calling calculatePayment() methods.
+     */
     public void processPayments() { //process payments for all employees
         for (int i = 0; i < numEmployee; i++) {
             emplist[i].calculatePayment();
         }
     }
-
+    
+    /**
+     * Prints the list of employees in the bag.
+     */
     public void print() { //print earning statements for all employees
         int counter = 0;
         while(counter < emplist.length) {
@@ -163,7 +194,12 @@ public class Company {
             }
         }
     }
-
+    
+    /**
+     * Used by sort() function to get the corresponding department codes of each department.
+     * @param employee - Employee object to retrieve department code
+     * @return int - departmentCode number
+     */
     private int departmentCode(Employee employee) {
         int codeRetrieve = 0;
         if (employee.getProfile().getDepartment().equals("CS")) {
@@ -179,9 +215,9 @@ public class Company {
     }
 
     /**
-     * Helper method to sort an array using selection sort
+     * Helper method to sort an array using selection sort.
      * @param arr - array to be sorted
-     * @param num - specifies how array will be sorted; if num is 0, sort by datePublished and else, sort by number
+     * @param num - specifies how array will be sorted; if num is 0, sort by dateHired and else, sort by department
      */
     private void sort(Employee[] arr, int num) {
         for (int i = 0; i < numEmployee - 1; i++) {
@@ -204,12 +240,17 @@ public class Company {
         }
     }
 
-
+    /**
+     * Prints the list of employees by dateHired (ascending).
+     */
     public void printByDate() { //print earning statements by date hired
         sort(emplist, 0);
         this.print();
     }
-
+    
+     /**
+     * Prints the list of employees by department in the following order (CS, ECE, IT).
+     */
     public void printByDepartment() { //print earning statements by department
         sort(emplist, 1);
         this.print();
