@@ -26,9 +26,10 @@ public class Company {
     }
 
     private int find(Employee employee) {
+        employee = new Employee(employee.getProfile());
         int index = 0;
         while(index < numEmployee){
-            if(emplist[index].equals(employee)){
+            if(employee.equals(emplist[index])){
                 // employee found
                 return index;
             }
@@ -55,14 +56,15 @@ public class Company {
         if (numEmployee == emplist.length) {
             this.grow();
         }
-        for (int i = 0; i < numEmployee; i++) {
-            if (emplist[i].getProfile().equals(employee.getProfile())) {
-                return false;
-            }
+        int index = find(employee);
+        if (index == NOT_FOUND) {
+            emplist[numEmployee] = employee;
+            numEmployee++;
+            return true;
         }
-        emplist[numEmployee] = employee;
-        numEmployee++;
-        return true;
+        else {
+            return false;
+        }
 
     }
 
@@ -98,9 +100,11 @@ public class Company {
             return false;
         }
         else {
-            if (emplist[index] instanceof Parttime) {
+            if (emplist[index] instanceof Parttime && employee instanceof Parttime) {
+                Parttime pt = (Parttime) employee;
+                int workHours = pt.getWorkingHours();
                 Parttime parttime = (Parttime) emplist[index];
-                parttime.setWorkingHours(parttime.getWorkingHours());
+                parttime.setWorkingHours(workHours);
                 return true;
             }
             return false;
