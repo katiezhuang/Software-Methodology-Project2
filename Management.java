@@ -7,9 +7,9 @@ public class Management extends Fulltime {
 
     // Constructor
     // managementCode is either 1 (manager), 2 (dep head), or 3 (director)
-    public Management(double salary, int managementCode){
+    public Management(Profile profile, double salary, int managementCode){
 
-        super(salary);
+        super(profile, salary);
         this.managementCode = managementCode;
 
     }
@@ -28,7 +28,7 @@ public class Management extends Fulltime {
             managerType = "Director";
         }
 
-        return super.toString() + "::" + managerType + " Compensation " + String.format("$%,.2f", this.getMoneyEarned());
+        return super.toString() + "::" + managerType + " Compensation " + String.format("$%,.2f", this.getPayment());
     }
 
     @Override
@@ -37,25 +37,29 @@ public class Management extends Fulltime {
         if(this == obj){
             return true;
         }
+        if (!(obj instanceof Management)) {
+            return false;
+        }
 
         Management management = (Management) obj;
 
-        return super.equals(obj) && (this.managementCode == management.managementCode);
+        return super.equals(management);
     }
 
     @Override
     public void calculatePayment(){
 
         if(this.managementCode == 1){
-            this.setMoneyEarned(this.getMoneyEarned() + MANAGER_BONUS);
+            this.setPayment(this.getPayment() + MANAGER_BONUS);
         }
         else if(this.managementCode == 2){
-            this.setMoneyEarned(this.getMoneyEarned() + DEP_HEAD_BONUS);
+            this.setPayment(this.getPayment() + DEP_HEAD_BONUS);
         }
         else if(this.managementCode == 3){
-            this.setMoneyEarned(this.getMoneyEarned() + DIRECTOR_BONUS);
+            this.setPayment(this.getPayment() + DIRECTOR_BONUS);
         }
 
     }
 
 }
+
