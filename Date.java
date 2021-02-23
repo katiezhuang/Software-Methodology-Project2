@@ -1,3 +1,11 @@
+/**
+ * This class holds the information for a date, consisting of the day, month, and year.
+ *
+ * The parameterized constructor allows one to create a Date object for any particular Date that is passed in as a String argument.
+ * The non-parameterized constructor allows one to create a Date object for the current Date.
+ *
+ * @author Ria Anand, Katie Zhuang
+ */
 import java.util.StringTokenizer;
 import java.util.Calendar;
 
@@ -26,13 +34,25 @@ public class Date implements Comparable<Date>{
     public static final int QUADRENNIAL = 4;
     public static final int CENTENNIAL = 100;
     public static final int QUARTERCENTENNIAL = 400;
-
+    
+    /**
+     * Getter method to access private field year.
+     * @return int - the year of the Date
+     */
     public int getYear(){
         return year;
     }
+    /**
+     * Getter method to access private field month.
+     * @return int - the month of the Date
+     */
     public int getMonth(){
         return month;
     }
+    /**
+     * Getter method to access private field day.
+     * @return int - the day of the Date
+     */
     public int getDay(){
         return day;
     }
