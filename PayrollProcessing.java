@@ -263,15 +263,15 @@ public class PayrollProcessing {
         Date date = new Date(dateToken);
         if (date.isValid()) {
             Profile profile = new Profile(nameToken, departmentToken, date);
-            Employee[] employeeList = company.getEmplist();
-            for (Employee employee : employeeList) {
-                if (employee.getProfile().equals(profile)) {
-                    company.setHours(employee);
-                    System.out.println("Working hours set.");
-                    return;
-                }
+            Parttime parttime = new Parttime(profile, Integer.parseInt(payOrHoursToken));
+            if (company.setHours(parttime)) {
+                System.out.println("Working hours set.");
+                return;
             }
-            System.out.println("Employee does not exist.");
+            else {
+                System.out.println("Employee does not exist.");
+            }
+
         }
         else {
             System.out.println(dateToken + "is not a valid date!");
