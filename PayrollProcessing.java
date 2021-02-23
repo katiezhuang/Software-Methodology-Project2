@@ -194,7 +194,7 @@ public class PayrollProcessing {
         // do I need this?
         if (!dateHired.isValid()){
 
-            System.out.println("invalid date");
+            System.out.println(dateToken + "is not a valid date!");
             return;
         }
 
