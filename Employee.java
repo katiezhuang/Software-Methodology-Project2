@@ -1,9 +1,8 @@
 public class Employee {
     private Profile profile;
-    private double payment;
+    private double paymentPerPeriod;
 
-    public Employee(Profile profile, int payment) {
-        this.payment = payment;
+    public Employee(Profile profile) {
         this.profile = profile;
     }
 
@@ -14,26 +13,31 @@ public class Employee {
     }
 
     public double getPayment() {
-        return this.payment;
+        return this.paymentPerPeriod;
     }
 
-    public void setPayment(double payment) {
-        this.payment = payment;
+    public void setPayment(double paymentPerPeriod) {
+        this.paymentPerPeriod = paymentPerPeriod;
     }
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Employee) {
-            Employee employee = (Employee) obj;
-            return (employee.getProfile().equals(this.getProfile()))
-                    && (employee.getPayment() == this.getPayment());
+
+        if(this == obj){
+            return true;
         }
+
+        if (!(obj instanceof Employee)) {
+            return false;
+        }
+        Employee employee = (Employee) obj;
+        return (employee.getProfile().equals(this.getProfile()));
     }
+
     @Override
     public String toString() {
         return this.getProfile().toString()
                 + "Payment $"
-                + this.payment
+                + this.paymentPerPeriod
                 + "::";
     }
-
 }
