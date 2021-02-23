@@ -1,3 +1,18 @@
+/**
+ * This class processes command lines from the console, in order to edit the company
+ * Accepted commands include:
+ * A[P/F] [name] [department] [dateHired] [hourlyRate/salary]--> to add a part-time or full time employee to the company
+ * AM [name] [department] [dateHired] [salary] [managementRole]--> to add a part-time or full time employee to the company
+ * R [name] [department] [dateHired] --> to remove an employee from the company
+ * C --> to process payments of all employees
+ * S [name] [department] [dateHired] [hoursWorked]--> to set the number of hours worked for a part-time employee
+ * PA --> to output the list of employees to the console with the current sequence
+ * PD --> to output the list of employees by department in the order (CS, ECE, IT)
+ * PH --> to output the list of employees by the date hired in ascending order
+ * Q --> to quit the program
+ *
+ * @author Ria Anand, Katie Zhuang
+ */
 import java.util.StringTokenizer;
 import java.util.Scanner;
 
@@ -9,10 +24,16 @@ public class PayrollProcessing {
     String payOrHoursToken;
     String codeToken;
     public static final int TOKEN_LENGTH = 2;
+    /**
+     *Constructor that initializes a Payroll Processing object
+     */
     public PayrollProcessing() {
 
     }
-
+    /**
+     * Enum that contains fields for different possible types of tokens from the command line.
+     * The types correspond to the number of tokens read from each line.
+     */
     public enum tokenType {
         type1,
         type2,
@@ -22,7 +43,11 @@ public class PayrollProcessing {
         type6,
         type7orMore
     }
-
+    /**
+     * Determines which command has been entered through the command line and calls the corresponding method.
+     * @param type - the type of token entered
+     * @param company - Company object containing Employee array
+     */
     private void findCommand(tokenType type, Company company) {
         switch (type) {
             case type1:
@@ -99,7 +124,9 @@ public class PayrollProcessing {
                 }
         }
     }
-
+    /**
+     * Runs the PayrollProcessing and actually accepts and tokenizes the input commands from the command line.
+     */
     public void run() {
         System.out.println("Payroll Processing Starts.");
         Company company = new Company();
@@ -147,7 +174,10 @@ public class PayrollProcessing {
         }
         System.out.println("Payroll Processing completed");
     }
-
+    /**
+     * Outputs the list of employees to the console with the current sequence.
+     * @param company - Company object containing Employee array
+     */
     private void printEarnings(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
@@ -156,7 +186,10 @@ public class PayrollProcessing {
             company.print();
         }
     }
-
+    /**
+     * Outputs the list of employees by department in the order (CS, ECE, IT).
+     * @param company - Company object containing Employee array
+     */
     private void printDepartment(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
@@ -165,7 +198,10 @@ public class PayrollProcessing {
             company.printByDepartment();
         }
     }
-
+    /**
+     * Outputs the list of employees by date hired in ascending order.
+     * @param company - Company object containing Employee array
+     */
     private void printdateHired(Company company) {
         if (company.getNumEmployee() == 0) {
             System.out.println("Employee database is empty.");
@@ -174,7 +210,11 @@ public class PayrollProcessing {
             company.printByDate();
         }
     }
-
+    /**
+     * Adds an Employee to the company.
+     * @param company - Company object containing Employee array
+     * @param PorF - either a part-time or full time employee
+     */
     private void addEmployee(Company company, int PorF) {
 
         if(!departmentToken.equals("CS") && !departmentToken.equals("ECE") && !departmentToken.equals("IT")){
@@ -238,7 +278,10 @@ public class PayrollProcessing {
             System.out.println("Employee is already in the list.");
         }
     }
-
+    /**
+     * Removes an Employee from the company.
+     * @param company - Company object containing Employee array
+     */
     private void removeEmployee(Company company) {
 
         Date date = new Date(dateToken);
@@ -253,12 +296,18 @@ public class PayrollProcessing {
         }
 
     }
-
+    /**
+     * Calculates the earnings of every Employee in the company.
+     * @param company - Company object containing Employee array
+     */
     private void calculateEarnings(Company company) {
         company.processPayments();
         System.out.println("Calculation of employee payments is done");
     }
-
+    /**
+     * Sets the hours worked for a parttime employee by calling the setHours method in Company class.
+     * @param company - Company object containing Employee array
+     */
     private void setHoursforParttime(Company company) {
         Date date = new Date(dateToken);
         if (date.isValid()) {
