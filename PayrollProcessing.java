@@ -237,7 +237,7 @@ public class PayrollProcessing {
         else{
             System.out.println("Employee is already in the list.");
         }
-}
+    }
 
     private void removeEmployee(Company company) {
 
