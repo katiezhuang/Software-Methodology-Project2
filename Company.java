@@ -103,7 +103,7 @@ public class Company {
                 parttime.setWorkingHours(parttime.getWorkingHours());
                 return true;
             }
-
+            return false;
         }
     }
 
