@@ -8,7 +8,7 @@ public class PayrollProcessing {
     String dateToken;
     String payOrHoursToken;
     String codeToken;
-
+    public static final int TOKEN_LENGTH = 2;
     public PayrollProcessing() {
 
     }
@@ -27,7 +27,7 @@ public class PayrollProcessing {
         switch (type) {
             case type1:
                 //it's one of the prints PA, PD, PH, or C
-                if (commandToken.length() > 2) {
+                if (commandToken.length() > TOKEN_LENGTH) {
                     System.out.println("Invalid command!");
                 } else if (commandToken.length() == 1) {
                     if (commandToken.charAt(0) == 'C') {
@@ -67,7 +67,7 @@ public class PayrollProcessing {
                 break;
             case type5:
                 // either AP, AF, or S
-                if (commandToken.length() > 2) {
+                if (commandToken.length() > TOKEN_LENGTH) {
                     System.out.println("Invalid command!");
                 } else if (commandToken.length() == 1) {
                     if (commandToken.charAt(0) == 'S') {
