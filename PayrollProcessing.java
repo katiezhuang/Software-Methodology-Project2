@@ -24,12 +24,16 @@ public class PayrollProcessing {
     String payOrHoursToken;
     String codeToken;
     public static final int TOKEN_LENGTH = 2;
+    public static final int PARTTIME = 0;
+    public static final int FULLTIME = 1;
+
     /**
      *Constructor that initializes a Payroll Processing object
      */
     public PayrollProcessing() {
 
     }
+
     /**
      * Enum that contains fields for different possible types of tokens from the command line.
      * The types correspond to the number of tokens read from each line.
@@ -43,6 +47,7 @@ public class PayrollProcessing {
         type6,
         type7orMore
     }
+
     /**
      * Determines which command has been entered through the command line and calls the corresponding method.
      * @param type - the type of token entered
@@ -53,16 +58,16 @@ public class PayrollProcessing {
             case type1:
                 //it's one of the prints PA, PD, PH, or C
                 if (commandToken.length() > TOKEN_LENGTH) {
-                    System.out.println("Invalid command!");
+                    System.out.println("Command '" + commandToken + "' not supported!");
                 } else if (commandToken.length() == 1) {
                     if (commandToken.charAt(0) == 'C') {
                         calculateEarnings(company);
                     } else {
-                        System.out.println("Invalid command!");
+                        System.out.println("Command '" + commandToken + "' not supported!");
                     }
                 } else {
                     if (commandToken.charAt(0) != 'P') {
-                        System.out.println("Invalid command!");
+                        System.out.println("Command '" + commandToken + "' not supported!");
                     } else {
                         if (commandToken.charAt(1) == 'A') {
                             printEarnings(company);
@@ -71,7 +76,7 @@ public class PayrollProcessing {
                         } else if (commandToken.charAt(1) == 'H') {
                             printdateHired(company);
                         } else {
-                            System.out.println("Invalid command!");
+                            System.out.println("Command '" + commandToken + "' not supported!");
                         }
                     }
                 }
@@ -80,36 +85,36 @@ public class PayrollProcessing {
             case type3:
             case type7orMore:
                 // too many tokens, display invalid
-                System.out.println("Invalid command!");
+                System.out.println("Command '" + commandToken + "' not supported!");
                 break;
             case type4:
                 // R command
                 if (commandToken.equals("R")) {
                     removeEmployee(company);
                 } else {
-                    System.out.println("Invalid command!");
+                    System.out.println("Command '" + commandToken + "' not supported!");
                 }
                 break;
             case type5:
                 // either AP, AF, or S
                 if (commandToken.length() > TOKEN_LENGTH) {
-                    System.out.println("Invalid command!");
+                    System.out.println("Command '" + commandToken + "' not supported!");
                 } else if (commandToken.length() == 1) {
                     if (commandToken.charAt(0) == 'S') {
                         setHoursforParttime(company);
                     } else {
-                        System.out.println("Invalid command!");
+                        System.out.println("Command '" + commandToken + "' not supported!");
                     }
                 } else {
                     if (commandToken.charAt(0) != 'A') {
-                        System.out.println("Invalid command!");
+                        System.out.println("Command '" + commandToken + "' not supported!");
                     } else {
                         if (commandToken.charAt(1) == 'P') {
                             addEmployee(company, 0);
                         } else if (commandToken.charAt(1) == 'F') {
                             addEmployee(company, 1);
                         } else {
-                            System.out.println("Invalid command!");
+                            System.out.println("Command '" + commandToken + "' not supported!");
                         }
                     }
                 }
@@ -120,10 +125,11 @@ public class PayrollProcessing {
                     addEmployee(company, 1);
                 }
                 else {
-                    System.out.println("Invalid command!");
+                    System.out.println("Command '" + commandToken + "' not supported!");
                 }
         }
     }
+
     /**
      * Runs the PayrollProcessing and actually accepts and tokenizes the input commands from the command line.
      */
@@ -136,6 +142,10 @@ public class PayrollProcessing {
             if (line.equals("Q")) {
                 break;
             } else if (line.equals("")) {
+                continue;
+            }
+            else if(line.charAt(0) == ' '){
+                line = line.trim();
                 continue;
             } else {
                 commandToken = null;
@@ -174,6 +184,7 @@ public class PayrollProcessing {
         }
         System.out.println("Payroll Processing completed");
     }
+
     /**
      * Outputs the list of employees to the console with the current sequence.
      * @param company - Company object containing Employee array
@@ -186,6 +197,7 @@ public class PayrollProcessing {
             company.print();
         }
     }
+
     /**
      * Outputs the list of employees by department in the order (CS, ECE, IT).
      * @param company - Company object containing Employee array
@@ -198,6 +210,7 @@ public class PayrollProcessing {
             company.printByDepartment();
         }
     }
+
     /**
      * Outputs the list of employees by date hired in ascending order.
      * @param company - Company object containing Employee array
@@ -210,6 +223,7 @@ public class PayrollProcessing {
             company.printByDate();
         }
     }
+
     /**
      * Adds an Employee to the company.
      * @param company - Company object containing Employee array
@@ -219,31 +233,35 @@ public class PayrollProcessing {
 
         if(!departmentToken.equals("CS") && !departmentToken.equals("ECE") && !departmentToken.equals("IT")){
 
-            System.out.println("invalid department code");
+            System.out.println("'" + departmentToken + "' is not a valid department code.");
             return;
         }
 
         if(Double.parseDouble(payOrHoursToken) < 0){
 
-            System.out.println("invalid salary/hourly rate");
+            if(PorF == PARTTIME){
+                System.out.println("Pay rate cannot be negative.");
+            }
+            else if(PorF == FULLTIME){
+                System.out.println("Salary cannot be negative.");
+            }
             return;
 
         }
         Date dateHired = new Date(dateToken);
 
-        // do I need this?
         if (!dateHired.isValid()){
 
-            System.out.println(dateToken + "is not a valid date!");
+            System.out.println(dateToken + " is not a valid date!");
             return;
         }
 
         Employee employee;
         Profile profile = new Profile(nameToken, departmentToken, dateHired);
 
-        if (PorF == 0) {
-            // add a parttime - might have to be changed based on Katie's code for parttime
-            employee = new Parttime(profile, Double.parseDouble(payOrHoursToken));
+        if (PorF == PARTTIME) {
+            // add a parttime
+            employee = new Parttime(profile, Double.parseDouble(payOrHoursToken), 0, 0);
 
         }
         else {
@@ -251,22 +269,17 @@ public class PayrollProcessing {
 
             if (codeToken == null) {
 
-                employee = new Fulltime(profile, Double.parseDouble(payOrHoursToken));
+                employee = new Fulltime(profile, Double.parseDouble(payOrHoursToken), 0);
 
             } else if (codeToken.equals("1") || codeToken.equals("2") || codeToken.equals("3")) {
 
-                employee = new Management(profile, Double.parseDouble(payOrHoursToken), Integer.parseInt(codeToken));
+                employee = new Management(profile, Double.parseDouble(payOrHoursToken), Integer.parseInt(codeToken), 0);
             }
             else{
 
-                System.out.println("invalid management code");
+                System.out.println("Invalid management code.");
                 return;
-
             }
-            // I wrote:
-            // Employee fulltime = new Fulltime(profile, Double.parseDouble(payOrHoursToken));
-            // so that everything in the company is just an Employee, but each is an instance of fulltime or parttime or management
-            // I think this is the right way to do it?? but gotta confirm
         }
 
         boolean addSuccessful = company.add(employee);
@@ -278,41 +291,74 @@ public class PayrollProcessing {
             System.out.println("Employee is already in the list.");
         }
     }
+
     /**
      * Removes an Employee from the company.
      * @param company - Company object containing Employee array
      */
     private void removeEmployee(Company company) {
 
+        if(company.getNumEmployee() == 0){
+            System.out.println("Employee database is empty.");
+            return;
+        }
         Date date = new Date(dateToken);
         Profile profile = new Profile(nameToken, departmentToken, date);
-        Employee employee = new Employee(profile);
+        Employee employee = new Employee(profile, 0);
         boolean removeSuccessful = company.remove(employee);
         if(removeSuccessful){
             System.out.println("Employee removed.");
         }
         else{
-            System.out.println("Employee doesn't exist.");
+            System.out.println("Employee does not exist.");
         }
 
     }
+
     /**
      * Calculates the earnings of every Employee in the company.
      * @param company - Company object containing Employee array
      */
     private void calculateEarnings(Company company) {
+
+        if(company.getNumEmployee() == 0){
+            System.out.println("Employee database is empty.");
+            return;
+        }
+
         company.processPayments();
-        System.out.println("Calculation of employee payments is done");
+        System.out.println("Calculation of employee payments is done.");
     }
+
     /**
      * Sets the hours worked for a parttime employee by calling the setHours method in Company class.
      * @param company - Company object containing Employee array
      */
     private void setHoursforParttime(Company company) {
+
         Date date = new Date(dateToken);
         if (date.isValid()) {
+
+            try{
+                Integer.parseInt(payOrHoursToken);
+            } catch (NumberFormatException nfe){
+                System.out.println("Working hours must be an integer.");
+                return;
+            }
+
+            if(Integer.parseInt(payOrHoursToken) < 0){
+                System.out.println("Working hours cannot be negative");
+                return;
+            }
+
+            if(Integer.parseInt(payOrHoursToken) > Parttime.MAX_TOTAL_HOURS){
+                System.out.println("Invalid Hours: over " + Parttime.MAX_TOTAL_HOURS + ".");
+                return;
+            }
+
             Profile profile = new Profile(nameToken, departmentToken, date);
-            Parttime parttime = new Parttime(profile, Integer.parseInt(payOrHoursToken));
+
+            Parttime parttime = new Parttime(profile, 0, 0, Integer.parseInt(payOrHoursToken));
             if (company.setHours(parttime)) {
                 System.out.println("Working hours set.");
                 return;
@@ -320,10 +366,9 @@ public class PayrollProcessing {
             else {
                 System.out.println("Employee does not exist.");
             }
-
         }
         else {
-            System.out.println(dateToken + "is not a valid date!");
+            System.out.println(dateToken + " is not a valid date!");
         }
     }
 
