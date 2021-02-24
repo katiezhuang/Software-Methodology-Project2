@@ -10,17 +10,23 @@ public class Parttime extends Employee{
 
     private int workingHours;
     private double hourlyRate;
-    public static final int MAX_HOURS = 80;
-    
+    public static final int MAX_REG_HOURS = 80;
+    public static final int MAX_TOTAL_HOURS = 100;
+    public static final double EXTRA_PAY_RATE = 1.5;
+
     /**
      * Constructor to initialize a Parttime employee object.
      * @param profile - assigns the given profile to the newly created Parttime object.
      * @param hourlyRate - assigns the hourly rate to the newly created Parttime object.
+     * @param paymentPerPeriod - assigns the payment per period to the newly created Parttime object.
+     * @param workingHours - assigns the number of working hours to the newly created Parttime object.
      */
-    public Parttime(Profile profile, double hourlyRate){
-        super(profile);
+    public Parttime(Profile profile, double hourlyRate, double paymentPerPeriod, int workingHours){
+        super(profile, paymentPerPeriod);
         this.hourlyRate = hourlyRate;
+        this.workingHours = workingHours;
     }
+
     /**
      * Getter method to access private field workingHours.
      * @return int - the number of hours worked
@@ -28,12 +34,15 @@ public class Parttime extends Employee{
     public int getWorkingHours() {
         return this.workingHours;
     }
+
     /**
      * Setter method to set private field workingHours.
+     * @param workingHours - number of hours worked
      */
     public void setWorkingHours(int workingHours) {
         this.workingHours = workingHours;
     }
+
     /**
      * Overrides the toString method for a Parttime object
      * @return String in the format:
@@ -43,14 +52,12 @@ public class Parttime extends Employee{
     public String toString(){
 
         return super.toString()
-                + "PART TIME"
-                + "::"
-                + "Hourly Rate $"
-                + this.hourlyRate
-                + "::"
-                + "Hours worked this period: "
+                + "::PART TIME::Hourly Rate "
+                + String.format("$%,.2f", this.hourlyRate)
+                + "::Hours worked this period: "
                 + this.workingHours;
     }
+
     /**
      * Equals method to check equivalence of object if object is an instance of Parttime.
      * Override method.
@@ -69,6 +76,7 @@ public class Parttime extends Employee{
 
         return super.equals(parttime);
     }
+
     /**
      * Method to calculate the payments of one 2-week period for a Parttime object.
      * Any extra hours past 80 hours worked will be paid 1.5 times the hourlyRate.
@@ -76,14 +84,13 @@ public class Parttime extends Employee{
      */
     @Override
     public void calculatePayment(){
-        if (this.workingHours <= MAX_HOURS) {
+        if (this.workingHours <= MAX_REG_HOURS) {
             this.setPayment(this.workingHours * this.hourlyRate);
         }
         else {
-            int extraHours = this.workingHours - MAX_HOURS;
-            this.setPayment((MAX_HOURS * this.hourlyRate) + (extraHours * 1.5 * this.hourlyRate));
+            int extraHours = this.workingHours - MAX_REG_HOURS;
+            this.setPayment((MAX_REG_HOURS * this.hourlyRate) + (extraHours * EXTRA_PAY_RATE * this.hourlyRate));
         }
-
     }
 
 }
