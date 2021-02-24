@@ -12,19 +12,22 @@ public class Management extends Fulltime {
     public static final double MANAGER_BONUS = 5000;
     public static final double DEP_HEAD_BONUS = 9500;
     public static final double DIRECTOR_BONUS = 12000;
+    public static final double MANAGER_CODE = 1;
+    public static final double DEP_HEAD_CODE = 2;
+    public static final double DIRECTOR_CODE = 3;
 
     /**
      * Constructor to initialize a Management employee object.
      * @param profile - assigns the given profile to the newly created Management object.
      * @param salary - assigns the given salary to the newly created Management object.
      * @param managementCode - assigns the given management code to the newly created Management object.
+     * @param paymentPerPeriod - assigns the given payment per period to the newly created Management object.
      */
-    public Management(Profile profile, double salary, int managementCode){
-
-        super(profile, salary);
+    public Management(Profile profile, double salary, int managementCode, double paymentPerPeriod){
+        super(profile, salary, paymentPerPeriod);
         this.managementCode = managementCode;
-
     }
+
     /**
      * Overrides the toString method for a Management object
      * @return String in the format:
@@ -34,18 +37,23 @@ public class Management extends Fulltime {
     public String toString() {
 
         String managerType;
-        if(this.managementCode == 1){
+        double managerCompensation;
+        if(this.managementCode == MANAGER_CODE){
             managerType = "Manager";
+            managerCompensation = MANAGER_BONUS/Company.NUM_PAY_PERIODS;
         }
-        else if(this.managementCode == 2){
+        else if(this.managementCode == DEP_HEAD_CODE){
             managerType = "DepartmentHead";
+            managerCompensation = DEP_HEAD_BONUS/Company.NUM_PAY_PERIODS;
         }
         else{
             managerType = "Director";
+            managerCompensation = DIRECTOR_BONUS/Company.NUM_PAY_PERIODS;
         }
 
-        return super.toString() + "::" + managerType + " Compensation " + String.format("$%,.2f", this.getPayment());
+        return super.toString() + "::" + managerType + " Compensation " + String.format("$%,.2f", managerCompensation);
     }
+
     /**
      * Equals method to check equivalence of object if object is an instance of Management.
      * Override method.
@@ -58,14 +66,10 @@ public class Management extends Fulltime {
         if(this == obj){
             return true;
         }
-        if (!(obj instanceof Management)) {
-            return false;
-        }
 
-        Management management = (Management) obj;
-
-        return super.equals(management);
+        return super.equals(obj);
     }
+
     /**
      * Method to calculate the payments of one payment period for a Management object, including their respective bonus.
      * Override method.
@@ -73,17 +77,16 @@ public class Management extends Fulltime {
     @Override
     public void calculatePayment(){
 
-        if(this.managementCode == 1){
-            this.setPayment(this.getPayment() + MANAGER_BONUS);
-        }
-        else if(this.managementCode == 2){
-            this.setPayment(this.getPayment() + DEP_HEAD_BONUS);
-        }
-        else if(this.managementCode == 3){
-            this.setPayment(this.getPayment() + DIRECTOR_BONUS);
-        }
+        super.calculatePayment();
 
+        if(this.managementCode == MANAGER_CODE){
+            this.setPayment(this.getPayment() + MANAGER_BONUS/Company.NUM_PAY_PERIODS);
+        }
+        else if(this.managementCode == DEP_HEAD_CODE){
+            this.setPayment(this.getPayment() + DEP_HEAD_BONUS/Company.NUM_PAY_PERIODS);
+        }
+        else if(this.managementCode == DIRECTOR_CODE){
+            this.setPayment(this.getPayment() + DIRECTOR_BONUS/Company.NUM_PAY_PERIODS);
+        }
     }
-
 }
-
