@@ -9,25 +9,27 @@
 public class Fulltime extends Employee{
 
     private double salary;
+
     /**
      * Constructor to initialize a Fulltime employee object.
      * @param profile - assigns the given profile to the newly created Fulltime object.
      * @param salary - assigns the given salary to the newly created Fulltime object.
+     * @param paymentPerPeriod - assigns the given payment per period to the newly created Fulltime object.
      */
-    public Fulltime(Profile profile, double salary){
-        super(profile);
+    public Fulltime(Profile profile, double salary, double paymentPerPeriod){
+        super(profile, paymentPerPeriod);
         this.salary = salary;
     }
-    
+
     /**
      * Overrides the toString method for a Fulltime object
      * @return String in the format: "Payment $[payment]::FULL TIME::Annual Salary [salary]"
      */
     @Override
     public String toString() {
-        return super.toString() + "::FULL TIME::Annual Salary " + String.format("$%,.2f", salary);
+        return super.toString() + "::FULL TIME::Annual Salary " + String.format("$%,.2f", this.salary);
     }
-    
+
     /**
      * Equals method to check equivalence of object if object is an instance of Fulltime.
      * Override method.
@@ -48,6 +50,7 @@ public class Fulltime extends Employee{
         return super.equals(fulltime);
 
     }
+
     /**
      * Method to calculate the payments of one payment period for a Fulltime object.
      * Override method.
