@@ -12,6 +12,7 @@ public class Company {
     public static final int CS_DEPARTMENT = 1;
     public static final int ECE_DEPARTMENT = 2;
     public static final int IT_DEPARTMENT = 3;
+    public static final int NUM_PAY_PERIODS = 26;
 
     /**
      * Constructor to create an empty bag.
@@ -28,14 +29,14 @@ public class Company {
     public int getNumEmployee() {
         return this.numEmployee;
     }
-    
+
     /**
      * Helper method to find an employee within emplist that has a matching profile.
      * @param employee - Employee object to find in this emplist
      * @return int - index of employee if found, NOT_FOUND otherwise
      */
     private int find(Employee employee) {
-        employee = new Employee(employee.getProfile());
+        employee = new Employee(employee.getProfile(), 0);
         int index = 0;
         while(index < numEmployee){
             if(employee.equals(emplist[index])){
@@ -59,7 +60,7 @@ public class Company {
         }
         emplist = biggerCompany;
     }
-    
+
     /**
      * Adds an Employee to this Company.
      * First checks to see if profile already present in emplist. If so, returns false
@@ -80,9 +81,8 @@ public class Company {
         else {
             return false;
         }
-
     }
-    
+
     /**
      * Removes an Employee from emplist.
      * @param employee - Employee object to remove from the bag
@@ -106,14 +106,12 @@ public class Company {
                     emplist[counter] = null;
                     break;
                 }
-
             }
             emplist[counter] = null;
             return true;
         }
-
     }
-    
+
     /**
      * Sets the hours worked of an Employee from emplist.
      * @param employee - Employee object to set hours to
@@ -135,7 +133,7 @@ public class Company {
             return false;
         }
     }
-    
+
     /**
      * Processes payments of all employees by calling calculatePayment() methods.
      */
@@ -144,7 +142,7 @@ public class Company {
             emplist[i].calculatePayment();
         }
     }
-    
+
     /**
      * Prints the list of employees in the bag.
      */
@@ -161,40 +159,7 @@ public class Company {
 
         }
     }
-    /**
-     * Helper method to determine whether the first date comes before the second date
-     * @param date1 - first date
-     * @param date2 - second date
-     * @return boolean - true if date1 comes before date2, false if date2 comes before date1
-     */
-    private boolean before(Date date1, Date date2) {
-        if (date1.getYear() < date2.getYear()) {
-            return true;
-        }
-        else if (date1.getYear() > date2.getYear()) {
-            return false;
-        }
-        else {
-            if (date1.getMonth() < date2.getMonth()) {
-                return true;
-            }
-            else if (date1.getMonth() > date2.getMonth()) {
-                return false;
-            }
-            else {
-                if (date1.getDay() < date2.getDay()) {
-                    return true;
-                }
-                else if (date1.getDay() > date2.getDay()) {
-                    return false;
-                }
-                else {
-                    return true;
-                }
-            }
-        }
-    }
-    
+
     /**
      * Used by sort() function to get the corresponding department codes of each department.
      * @param employee - Employee object to retrieve department code
@@ -224,7 +189,7 @@ public class Company {
             int min = i;
             for (int j = i + 1; j < numEmployee; j++) {
                 if (num == 0) {
-                    if(before(arr[j].getProfile().getDateHired(), arr[min].getProfile().getDateHired())) {
+                    if(arr[j].getProfile().getDateHired().compareTo(arr[min].getProfile().getDateHired()) == Date.DATE_LESS_THAN) {
                         min = j;
                     }
                 }
@@ -247,8 +212,8 @@ public class Company {
         sort(emplist, 0);
         this.print();
     }
-    
-     /**
+
+    /**
      * Prints the list of employees by department in the following order (CS, ECE, IT).
      */
     public void printByDepartment() { //print earning statements by department
@@ -256,4 +221,3 @@ public class Company {
         this.print();
     }
 }
- 
