@@ -11,6 +11,7 @@ public class Profile {
     private String name; // employee's name in the form "lastname,firstname"
     private String department; // department code: CS, ECE, IT
     private Date dateHired;
+
     /**
      * Constructor to initialize a Profile object.
      * @param name - assigns the given name to the newly created Profile object.
@@ -24,13 +25,7 @@ public class Profile {
         this.dateHired = dateHired;
 
     }
-    /**
-     * Getter method to access private field name.
-     * @return String - the name of the Employee
-     */
-    public String getName(){
-        return name;
-    }
+
     /**
      * Getter method to access private field department.
      * @return String - the department of the Employee
@@ -38,6 +33,7 @@ public class Profile {
     public String getDepartment(){
         return department;
     }
+
     /**
      * Getter method to access private field dateHired.
      * @return Date - the hire date of the Employee
@@ -45,15 +41,18 @@ public class Profile {
     public Date getDateHired(){
         return dateHired;
     }
+
     /**
      * Overrides the toString method for a Profile object
      * @return String in the format: "[name]::[department]::[dateHired]"
      */
+
     @Override
     public String toString(){
 
         return name + "::" + department + "::" + dateHired.toString();
     }
+
     /**
      * Equals method to check equivalence of object if object is an instance of Profile.
      * Override method.
@@ -67,9 +66,7 @@ public class Profile {
             return true;
         }
         Profile profile = (Profile) obj;
-        if(profile.name.equals(this.name) && profile.department.equals(this.department) && && profile.dateHired.getDay() == this.dateHired.getDay()
-                && profile.dateHired.getYear() == this.dateHired.getYear()
-                && profile.dateHired.getMonth() == this.dateHired.getMonth()) {
+        if(profile.name.equals(this.name) && profile.department.equals(this.department) && (profile.dateHired.compareTo(this.dateHired) == 0)) {
             return true;
         }
         else{
@@ -79,4 +76,3 @@ public class Profile {
 
 
 }
-
