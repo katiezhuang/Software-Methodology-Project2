@@ -34,28 +34,9 @@ public class Date implements Comparable<Date>{
     public static final int QUADRENNIAL = 4;
     public static final int CENTENNIAL = 100;
     public static final int QUARTERCENTENNIAL = 400;
-    
-    /**
-     * Getter method to access private field year.
-     * @return int - the year of the Date
-     */
-    public int getYear(){
-        return year;
-    }
-    /**
-     * Getter method to access private field month.
-     * @return int - the month of the Date
-     */
-    public int getMonth(){
-        return month;
-    }
-    /**
-     * Getter method to access private field day.
-     * @return int - the day of the Date
-     */
-    public int getDay(){
-        return day;
-    }
+    public static final int DATE_EQUAL = 0;
+    public static final int DATE_LESS_THAN = -1;
+    public static final int DATE_GREATER_THAN = 1;
 
     /**
      * Parameterized constructor that initializes a Date object using
@@ -157,13 +138,11 @@ public class Date implements Comparable<Date>{
 
                     // invalid
                     isValid = false;
-                    //System.out.println("Invalid Date!");
                 }
                 else if(!isLeapYear && this.day > DAY_28 || this.day < 1){
 
                     // invalid
                     isValid = false;
-                    //System.out.println("Invalid Date!");
                 }
                 else{
 
@@ -225,31 +204,28 @@ public class Date implements Comparable<Date>{
             if(this.month == date.month){
 
                 if(this.day == date.day){
-                    return 0;
+                    return DATE_EQUAL;
                 }
                 else if(this.day < date.day){
 
-                    return -1;
+                    return DATE_LESS_THAN;
                 }
                 else{
-                    return 1;
+                    return DATE_GREATER_THAN;
                 }
             }
             else if(this.month < date.month){
-                return -1;
+                return DATE_LESS_THAN;
             }
             else{
-                return 1;
+                return DATE_GREATER_THAN;
             }
         }
         else if(this.year < date.year){
-            return -1;
+            return DATE_LESS_THAN;
         }
         else{
-            return 1;
+            return DATE_GREATER_THAN;
         }
-
     }
-
 }
-
